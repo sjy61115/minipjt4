@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }} - 영화 정보</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .movie-header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://image.tmdb.org/t/p/w1280{{ movie.backdrop_path }}') center/cover;
+            color: white;
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .movie-content {
+            display: flex;
+            padding: 2rem;
+            gap: 2rem;
+        }
+        
+        .movie-poster {
+            flex: 0 0 300px;
+        }
+        
+        .movie-poster img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .movie-info {
+            flex: 1;
+        }
+        
+        .movie-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .movie-tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .movie-overview {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .movie-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .detail-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-value {
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .genre-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .movie-content {
+                flex-direction: column;
+            }
+            
+            .movie-poster {
+                flex: none;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="movie-header">
+            <h1 class="movie-title">{{ movie.title }}</h1>
+            {% if movie.tagline %}
+                <p class="movie-tagline">"{{ movie.tagline }}"</p>
+            {% endif %}
+        </div>
+        
+        <div class="movie-content">
+            <div class="movie-poster">
+                {% if movie.poster_path %}
+                    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }} 포스터">
+                {% else %}
+                    <div style="width: 100%; height: 450px; background: #ddd; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #666;">
+                        포스터 없음
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="movie-info">
+                <div class="movie-overview">
+                    <h3>줄거리</h3>
+                    <p>{{ movie.overview or "줄거리 정보가 없습니다." }}</p>
+                </div>
+                
+                <div class="movie-details">
+                    <div class="detail-item">
+                        <div class="detail-label">개봉일</div>
+                        <div class="detail-value">{{ movie.release_date or "미정" }}</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">평점</div>
+                        <div class="detail-value">⭐ {{ "%.1f"|format(movie.vote_average) }}/10</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">상영시간</div>
+                        <div class="detail-value">{{ movie.runtime or "미정" }}분</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">예산</div>
+                        <div class="detail-value">
+                            {% if movie.budget %}
+                                ${{ "{:,}".format(movie.budget) }}
+                            {% else %}
+                                미정
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                {% if movie.genres %}
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">장르</h3>
+                        <div class="genres">
+                            {% for genre in movie.genres %}
+                                <span class="genre-tag">{{ genre.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div style="margin-top: 2rem;">
+                    <a href="/" class="back-btn">홈으로 돌아가기</a>
+                    <a href="/popular" class="back-btn">인기 영화 보기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

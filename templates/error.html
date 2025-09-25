@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오류 발생</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        
+        .error-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .error-title {
+            color: #e74c3c;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-icon">😵</div>
+        <h1 class="error-title">오류가 발생했습니다</h1>
+        <div class="error-message">
+            <p>요청을 처리하는 중 문제가 발생했습니다.</p>
+            {% if error %}
+                <p style="margin-top: 1rem; padding: 1rem; background: #fee; border-radius: 10px; color: #d63031;">
+                    <strong>오류 상세:</strong> {{ error }}
+                </p>
+            {% endif %}
+        </div>
+        
+        <div>
+            <a href="/" class="btn">홈으로 돌아가기</a>
+            <a href="/popular" class="btn">인기 영화 보기</a>
+        </div>
+    </div>
+</body>
+</html>

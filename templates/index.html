@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 TMDB 영화 검색</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+        
+        .search-form {
+            margin-bottom: 2rem;
+        }
+        
+        input[type="text"] {
+            width: 70%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-right: 10px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .navigation {
+            margin-top: 2rem;
+        }
+        
+        .error {
+            color: #e74c3c;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #fee;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 TMDB 영화 검색</h1>
+        
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        <form class="search-form" action="/search" method="get">
+            <input type="text" name="q" placeholder="영화 제목을 입력하세요..." required>
+            <button type="submit" class="btn">검색</button>
+        </form>
+        
+        <div class="navigation">
+            <a href="/popular" class="btn">인기 영화 보기</a>
+            <a href="/movie/550" class="btn">파이트 클럽 (샘플)</a>
+        </div>
+        
+        <div style="margin-top: 2rem; color: #666; font-size: 0.9rem;">
+            <p>The Movie Database (TMDB) API를 사용한 영화 검색 서비스</p>
+        </div>
+    </div>
+</body>
+</html>

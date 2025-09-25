@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'{{ query }}' 검색 결과</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .search-form {
+            margin-bottom: 1rem;
+        }
+        
+        input[type="text"] {
+            width: 60%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .movie-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 400px;
+            background: #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .movie-info {
+            padding: 1.5rem;
+        }
+        
+        .movie-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .movie-date {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .movie-overview {
+            color: #666;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .movie-rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        
+        .no-results {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>'{{ query }}' 검색 결과</h1>
+            
+            <form class="search-form" action="/search" method="get">
+                <input type="text" name="q" placeholder="다른 영화를 검색해보세요..." value="{{ query }}">
+                <button type="submit" class="btn">검색</button>
+            </form>
+            
+            <a href="/" class="btn">홈으로</a>
+            <a href="/popular" class="btn">인기 영화</a>
+        </div>
+        
+        {% if results %}
+            <div class="results-grid">
+                {% for movie in results %}
+                    <div class="movie-card" onclick="location.href='/movie/{{ movie.id }}'">
+                        <div class="movie-poster">
+                            {% if movie.poster_path %}
+                                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }} 포스터">
+                            {% else %}
+                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #999;">
+                                    포스터 없음
+                                </div>
+                            {% endif %}
+                            {% if movie.vote_average %}
+                                <div class="movie-rating">{{ "%.1f"|format(movie.vote_average) }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="movie-info">
+                            <div class="movie-title">{{ movie.title }}</div>
+                            <div class="movie-date">{{ movie.release_date or "개봉일 미정" }}</div>
+                            {% if movie.overview %}
+                                <div class="movie-overview">{{ movie.overview }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <h2>검색 결과가 없습니다</h2>
+                <p>'{{ query }}'에 대한 검색 결과를 찾을 수 없습니다.</p>
+                <p>다른 검색어로 다시 시도해보세요.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
