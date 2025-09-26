@@ -97,3 +97,5 @@ async def get_movie_api(movie_id: int):
 
 
         raise HTTPException(status_code=404, detail=str(e))
+    
+    #uvicorn main:app --reload --port 5000
