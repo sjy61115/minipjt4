@@ -28,12 +28,27 @@ async def index(request: Request):
 
 @app.get("/movie/{movie_id}", response_class=HTMLResponse)
 async def get_movie(request: Request, movie_id: int):
-    url = f"{BASE_URL}/movie/{movie_id}?language=ko-KR"
+    movie_url = f"{BASE_URL}/movie/{movie_id}?language=ko-KR"
+    videos_url = f"{BASE_URL}/movie/{movie_id}/videos?language=en-US"
     
     try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        movie_data = response.json()
+        # 영화 기본 정보 가져오기
+        movie_response = requests.get(movie_url, headers=headers)
+        movie_response.raise_for_status()
+        movie_data = movie_response.json()
+        
+        # 영화 동영상 정보 가져오기
+        videos_response = requests.get(videos_url, headers=headers)
+        videos_response.raise_for_status()
+        videos_data = videos_response.json()
+        
+        # YouTube 예고편 필터링 (Trailer, Teaser)
+        trailers = [video for video in videos_data.get('results', []) 
+                   if video.get('site') == 'YouTube' and 
+                   video.get('type') in ['Trailer', 'Teaser']]
+        
+        movie_data['trailers'] = trailers
+        
         return templates.TemplateResponse("movie_detail.html", {"request": request, "movie": movie_data})
     except requests.exceptions.RequestException as e:
         return templates.TemplateResponse("error.html", {"request": request, "error": str(e)})

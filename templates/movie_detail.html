@@ -112,6 +112,39 @@
             font-size: 0.9rem;
         }
         
+        .videos-section {
+            background: #f8f9fa;
+        }
+        
+        .video-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .video-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .video-item iframe {
+            width: 100%;
+            height: 220px;
+            border: none;
+        }
+        
+        .video-title {
+            padding: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
         .back-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -138,6 +171,14 @@
                 flex: none;
                 max-width: 300px;
                 margin: 0 auto;
+            }
+            
+            .video-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-item iframe {
+                height: 200px;
             }
         }
     </style>
@@ -213,6 +254,24 @@
                 </div>
             </div>
         </div>
+        
+        {% if movie.trailers %}
+            <div class="videos-section" style="padding: 2rem; border-top: 1px solid #eee;">
+                <h3 style="margin-bottom: 1rem; text-align: center;">🎬 예고편 & 티저</h3>
+                <div class="video-container">
+                    {% for video in movie.trailers[:4] %}
+                        <div class="video-item">
+                            <iframe 
+                                src="https://www.youtube.com/embed/{{ video.key }}" 
+                                title="{{ video.name }}"
+                                allowfullscreen>
+                            </iframe>
+                            <div class="video-title">{{ video.name }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>
