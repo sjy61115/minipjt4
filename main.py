@@ -7,6 +7,9 @@ import json
 
 app = FastAPI()
 
+# 정적 파일 설정 (CSS, 이미지, JS 등)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # 템플릿 설정
 templates = Jinja2Templates(directory="templates")
 

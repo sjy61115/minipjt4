@@ -30,6 +30,15 @@
             width: 90%;
         }
         
+        .logo {
+            margin-bottom: 1rem;
+        }
+        
+        .logo img {
+            max-width: 200px;
+            height: auto;
+        }
+        
         h1 {
             color: #333;
             margin-bottom: 2rem;
@@ -88,6 +97,9 @@
 </head>
 <body>
     <div class="container">
+        <div class="logo">
+            <img src="/static/logo11.png" alt="RAPALIX Logo">
+        </div>
         <h1>🎬 TMDB 영화 검색</h1>
         
         {% if error %}
