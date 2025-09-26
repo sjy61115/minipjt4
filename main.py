@@ -44,7 +44,7 @@ async def search_movies(request: Request, q: str = ""):
     
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status()
+        response.raise_for_status() #애러 체크
         search_results = response.json()
         return templates.TemplateResponse("search_results.html", {
             "request": request, 
